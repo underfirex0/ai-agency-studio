@@ -1,0 +1,338 @@
+{
+  "meta": {
+    "project_name": "Altitude Coffee Roasters",
+    "industry": "specialty coffee",
+    "target_audience": "Urban professionals 28–42, prioritise provenance and craft over convenience, already buy direct-trade beans, follow roasters on Instagram, read Standart magazine, treat a Saturday morning cup as a ritual rather than a caffeine fix.",
+    "tone_keywords": ["unhurried", "tactile", "precise", "warm", "uncompromising"]
+  },
+
+  "creative_direction": {
+    "concept": "Every bag of coffee is a compressed journey from a specific hillside to your cup — the site makes that altitude, terroir, and human chain viscerally felt.",
+    "narrative": "The visitor lands on darkness broken only by steam curling off a single pour — no text, just atmosphere. Scrolling down reveals the origin map: exact farm coordinates, elevation, harvest date. The middle act introduces the roasters by name, with their hand-annotated tasting notes. The site closes on the subscription CTA framed not as a product but as 'a standing order from the mountain.'",
+    "emotional_tone": "The quiet pride of someone who has found exactly the thing they were looking for.",
+    "signature_moment": "On the origin section, hovering a farm pin on the map triggers a 3-second ambient field recording from that specific farm (birds, wind, distant machinery) while the elevation number counts up in large type — making the geography audible.",
+    "brand_personality": "A seasoned Q-grader who speaks in exact descriptors ('dried apricot, brown butter, 72% cacao') rather than superlatives. Would never say 'artisanal' or 'passionate'. Comfortable with silence. Wears an apron with burn marks."
+  },
+
+  "ux_structure": {
+    "sitemap": [
+      {
+        "id": "hero",
+        "label": "Opening",
+        "purpose": "Create immediate atmosphere; communicate that this is not a commodity brand — zero copy, pure sensation."
+      },
+      {
+        "id": "origins",
+        "label": "Where It Grows",
+        "purpose": "Build credibility and emotional connection through farm-level provenance — interactive map with audio.",
+        "children": [
+          { "id": "origins-map", "label": "Farm Map", "purpose": "Let visitors explore the sourcing geography and trigger farm audio snippets." },
+          { "id": "origins-detail", "label": "Farm Profile", "purpose": "Slide-in panel with farmer portrait, elevation, processing method, and harvest window." }
+        ]
+      },
+      {
+        "id": "roasters",
+        "label": "The People",
+        "purpose": "Humanise the craft; introduce the two roasters by name with handwritten tasting notes."
+      },
+      {
+        "id": "offerings",
+        "label": "Current Roasts",
+        "purpose": "Convert interest into selection — present 3–4 active single-origins with buy/subscribe actions."
+      },
+      {
+        "id": "subscription",
+        "label": "Standing Order",
+        "purpose": "Drive recurring revenue; reframe subscription as an ongoing relationship, not a discount programme."
+      },
+      {
+        "id": "footer",
+        "label": "Footer",
+        "purpose": "Wholesale enquiries, press, and the only social link on the site (Instagram)."
+      }
+    ],
+    "conversion_flow": "Hero creates atmosphere → origins section earns trust through provenance specificity → roasters section adds human accountability → offerings lets them pick a bag → subscription CTA captures them for repeat revenue. The path from hero to 'add to cart' is achievable in 4 scroll steps with no lateral navigation required.",
+    "navigation_pattern": "Wordmark only in top-left, no nav links on desktop — the page rewards linear scrolling. A minimal dot-indicator on the right edge marks section position. At ≤768px a 24px hamburger opens a full-screen overlay nav with all section labels."
+  },
+
+  "design_system": {
+    "typography": {
+      "heading_font": {
+        "name": "Canela",
+        "weight": "300,400",
+        "source": "custom"
+      },
+      "body_font": {
+        "name": "Söhne",
+        "weight": "400,500",
+        "source": "custom"
+      },
+      "scale": {
+        "display": "7.5rem",
+        "h1": "4.5rem",
+        "h2": "2.75rem",
+        "h3": "1.75rem",
+        "lead": "1.25rem",
+        "body": "1rem",
+        "small": "0.875rem",
+        "caption": "0.75rem"
+      }
+    },
+    "color_palette": [
+      { "name": "Wet Earth",    "hex": "#1C1512", "role": "background" },
+      { "name": "Raw Parchment","hex": "#F2EDE4", "role": "primary-text" },
+      { "name": "Blonde Roast", "hex": "#C8A96E", "role": "accent" },
+      { "name": "Dried Cherry", "hex": "#8B2E2E", "role": "highlight" },
+      { "name": "Steam",        "hex": "#E8E3DA", "role": "surface" },
+      { "name": "Graphite",     "hex": "#3A3530", "role": "secondary-surface" }
+    ],
+    "spacing_scale": {
+      "xs":  "0.25rem",
+      "sm":  "0.5rem",
+      "md":  "1rem",
+      "lg":  "1.5rem",
+      "xl":  "2.5rem",
+      "2xl": "4rem",
+      "3xl": "7rem",
+      "4xl": "12rem"
+    },
+    "components": [
+      {
+        "name": "FarmPin",
+        "description": "SVG map marker that pulses on hover, triggers audio playback and a slide-in FarmPanel. Active state shows elevation label in Canela display size."
+      },
+      {
+        "name": "FarmPanel",
+        "description": "Slide-in right-side drawer showing farmer portrait (greyscale), farm name, country, altitude in masl, processing method badge, and harvest month range."
+      },
+      {
+        "name": "RoasterCard",
+        "description": "Portrait photo in a ragged-edge mask, name in Canela h3, handwriting-style SVG of a tasting note overlaid at 40° rotation."
+      },
+      {
+        "name": "CoffeeCard",
+        "description": "Product card with origin flag, process badge (washed/natural/honey), flavour wheel fragment, price, and two CTAs: 'Buy once' and 'Add to standing order'."
+      },
+      {
+        "name": "ElevationCounter",
+        "description": "Large Canela display-size number that counts up from 0 to the farm's actual masl value over 2.4s when the farm pin is activated."
+      },
+      {
+        "name": "AmbientAudioPlayer",
+        "description": "Invisible audio element, auto-plays on farm pin hover, fades out after 3s or on mouseout. No visible controls — sound is the surprise."
+      },
+      {
+        "name": "SectionDotNav",
+        "description": "Vertical stack of 6 dots on the right edge, active dot fills with Blonde Roast accent colour. Clicks scroll to the corresponding section."
+      },
+      {
+        "name": "SubscriptionToggle",
+        "description": "Segmented control: 'Single bag' / 'Standing order'. Selecting standing order exposes frequency selector (2-weekly / 4-weekly) and shows a small price-per-bag saving."
+      }
+    ]
+  },
+
+  "motion_spec": {
+    "global_principles": [
+      "Nothing moves unless scroll or pointer caused it — no auto-playing carousels or looping animations.",
+      "Easing is always decelerating (ease-out or custom cubic-bezier) — the site never feels rushed.",
+      "Opacity and transform are the only animated properties; no layout-triggering animations.",
+      "Reduced-motion media query disables all transitions and parallax, substituting instant cuts."
+    ],
+    "per_section": [
+      {
+        "section_id": "hero",
+        "scroll_behavior": "Steam particle canvas parallaxes at 0.25× scroll rate. Background stays fixed. At 80vh scroll depth, the canvas opacity fades to 0 over 40px.",
+        "transitions": "On load: full-screen black fades to scene over 1800ms after a 400ms initial hold. Wordmark fades in from opacity 0 at translateY(12px) after 1200ms.",
+        "timing": "1800ms cubic-bezier(0.16, 1, 0.3, 1)"
+      },
+      {
+        "section_id": "origins",
+        "scroll_behavior": "Section pins for 150vh of scroll travel. During the pin, the SVG world map scales from 0.85 to 1.0 and farm pins stagger-fade in at 80ms intervals.",
+        "transitions": "Section enter: map container clips in from bottom using clip-path(inset(100% 0 0 0)) → inset(0%). Farm pins scale from 0 to 1 with a spring overshoot.",
+        "timing": "Map clip: 700ms cubic-bezier(0.16, 1, 0.3, 1). Pin spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1)."
+      },
+      {
+        "section_id": "origins-detail",
+        "scroll_behavior": "Drawer is pointer-triggered, not scroll-driven. Slides in from right at translateX(100%) → translateX(0).",
+        "transitions": "Panel open: translateX + overlay fade-in simultaneously. Close: reverse, 50ms faster.",
+        "timing": "380ms cubic-bezier(0.16, 1, 0.3, 1)"
+      },
+      {
+        "section_id": "roasters",
+        "scroll_behavior": "Two roaster cards enter from opposite sides (left and right) as the section scrolls into the viewport center.",
+        "transitions": "Left card: translateX(-60px) opacity 0 → natural. Right card: translateX(60px) opacity 0 → natural. Tasting-note SVG overlays rotate from -50° → -40° while fading in.",
+        "timing": "600ms cubic-bezier(0.16, 1, 0.3, 1), staggered 120ms between cards."
+      },
+      {
+        "section_id": "offerings",
+        "scroll_behavior": "Cards stagger-enter from below as they cross the 80% viewport threshold. No scroll pinning.",
+        "transitions": "Each CoffeeCard: translateY(32px) opacity 0 → natural, 80ms stagger per card.",
+        "timing": "500ms cubic-bezier(0.16, 1, 0.3, 1)"
+      },
+      {
+        "section_id": "subscription",
+        "scroll_behavior": "Section background fades from Wet Earth to a slightly lighter Graphite as it enters, giving a subtle 'stepping into a warmer room' feel.",
+        "transitions": "Headline enters at translateY(20px) opacity 0. Toggle and frequency selector fade in 200ms later.",
+        "timing": "650ms cubic-bezier(0.16, 1, 0.3, 1)"
+      },
+      {
+        "section_id": "footer",
+        "scroll_behavior": "No scroll animation. Static.",
+        "transitions": "None.",
+        "timing": "N/A"
+      }
+    ]
+  },
+
+  "spatial_3d_spec": {
+    "used": true,
+    "renderer": "three.js",
+    "scenes": [
+      {
+        "id": "hero-steam",
+        "description": "Hero background: a shallow field of volumetric steam particles rising from below the frame. Rendered on a dark canvas; particles are off-white with additive blending. Responds to pointer position with a subtle 6° tilt via device orientation or mouse parallax.",
+        "camera_movement": "Fixed. Pointer moves shift a secondary layer of particles on a separate plane at 0.3× rate — creating depth without a moving camera.",
+        "performance_budget": {
+          "max_triangles": 0,
+          "target_fps": 60
+        }
+      }
+    ]
+  },
+
+  "asset_manifest": {
+    "images": [
+      {
+        "id": "hero-pour-shot",
+        "prompt": "Extreme close-up of a slow-motion pour of black coffee into a white ceramic cup, steam rising, dark background, shot on 85mm f/1.4, shallow depth of field, slightly underexposed, editorial photography style",
+        "style_reference": "Charlie Schuck food photography — deep shadow, single key light from above-left",
+        "usage": "Hero section full-bleed background, 1920×1080",
+        "dimensions": "1920×1080"
+      },
+      {
+        "id": "farm-ethiopia-yirgacheffe",
+        "prompt": "Wide establishing shot of a coffee farm in the Ethiopian highlands at golden hour, red coffee cherries on branches in foreground, terraced hillside and mist in background, shot on medium format film",
+        "style_reference": "Sebastião Salgado — high contrast black and white with luminous midtones",
+        "usage": "Farm detail panel portrait, origins section",
+        "dimensions": "800×1000"
+      },
+      {
+        "id": "farm-colombia-huila",
+        "prompt": "Portrait of a Colombian coffee farmer holding a basket of freshly picked red cherries, direct eye contact, natural afternoon light, documentary style, slightly desaturated",
+        "style_reference": "Lynsey Addario documentary portraiture",
+        "usage": "Farm detail panel portrait, origins section",
+        "dimensions": "800×1000"
+      },
+      {
+        "id": "roaster-portrait-01",
+        "prompt": "Black and white portrait of a woman in her late 30s standing in front of a drum roaster, wearing a canvas apron, arms crossed, confident and calm expression, soft directional studio light",
+        "style_reference": "Platon portraiture — simple background, strong eye contact",
+        "usage": "RoasterCard left, roasters section",
+        "dimensions": "600×750"
+      },
+      {
+        "id": "roaster-portrait-02",
+        "prompt": "Black and white portrait of a man in his early 40s adjusting a roaster dial, profile shot, industrial background slightly blurred, hands sharp, technical focus",
+        "style_reference": "Platon portraiture — chiaroscuro lighting",
+        "usage": "RoasterCard right, roasters section",
+        "dimensions": "600×750"
+      },
+      {
+        "id": "product-bag-yirgacheffe",
+        "prompt": "Studio product shot of a matte kraft paper coffee bag with minimal black label, bag slightly open showing beans, white seamless background, soft shadow, top-down 15° angle",
+        "style_reference": "Apple product photography — crisp, no lens flare, zero noise",
+        "usage": "CoffeeCard, offerings section",
+        "dimensions": "600×600"
+      },
+      {
+        "id": "product-bag-huila",
+        "prompt": "Same studio setup as product-bag-yirgacheffe but bag label shows Colombia Huila text, bag upright and sealed",
+        "style_reference": "Apple product photography",
+        "usage": "CoffeeCard, offerings section",
+        "dimensions": "600×600"
+      }
+    ],
+    "videos": [
+      {
+        "id": "hero-loop",
+        "prompt": "10-second seamless loop of coffee steam rising in slow motion against a near-black background, shallow depth of field, no camera movement, photorealistic",
+        "usage": "Hero section background fallback if WebGL particle scene underperforms on mobile",
+        "duration_seconds": 10,
+        "format": "mp4"
+      }
+    ],
+    "audio": [
+      {
+        "id": "farm-audio-ethiopia",
+        "description": "3-second ambient field recording from an Ethiopian highland farm: morning birds, light wind through coffee cherry branches, distant rooster",
+        "usage": "Triggered on hover of Ethiopia farm pin in origins map",
+        "duration_seconds": 3,
+        "loop": false
+      },
+      {
+        "id": "farm-audio-colombia",
+        "description": "3-second ambient field recording from a Colombian finca: cicadas, water channel, a brief snippet of someone calling out in Spanish at low volume",
+        "usage": "Triggered on hover of Colombia farm pin in origins map",
+        "duration_seconds": 3,
+        "loop": false
+      }
+    ]
+  },
+
+  "taste_scores": {
+    "creative_direction": {
+      "score": 88,
+      "notes": "The signature moment (audio + elevation counter) is distinctive and hard to copy — high recall value. Score held back by the narrative not yet specifying how the transition from roasters section to offerings avoids feeling like a gear-shift into commerce."
+    },
+    "visual_design": {
+      "score": 82,
+      "notes": "Canela + Söhne pairing is well-worn in the specialty food space but executed with the right weight choices. Dried Cherry highlight is underused — currently only planned for the farm-audio active state, should appear in at least one more place to feel intentional."
+    },
+    "motion": {
+      "score": 85,
+      "notes": "Global principles are disciplined. The 150vh pin on origins is confident. Risk: on mid-range Android, the particle canvas and the pinned scroll section running together may cause jank — needs a performance branch where the pin is replaced with a standard scroll-triggered stagger."
+    },
+    "assets": {
+      "score": 79,
+      "notes": "Prompts are specific and have clear style references. The two farm-audio clips are the strongest asset idea in the brief. Gap: no asset defined for the standing-order section — it currently relies entirely on typography and component interaction, which may feel thin."
+    },
+    "final": {
+      "score": 0,
+      "notes": "Not yet scored — awaiting build completion."
+    }
+  },
+
+  "version_history": [
+    {
+      "timestamp": "2026-06-12T09:00:00Z",
+      "stage": "intake",
+      "summary": "Initial brief created from client questionnaire responses for Altitude Coffee Roasters project."
+    },
+    {
+      "timestamp": "2026-06-12T09:15:00Z",
+      "stage": "creative_direction",
+      "summary": "Concept, narrative arc, and signature moment defined; brand personality deliberately positioned against 'artisanal' category clichés."
+    },
+    {
+      "timestamp": "2026-06-12T09:40:00Z",
+      "stage": "ux_structure",
+      "summary": "Sitemap locked at 6 sections; no top navigation by design — linear scroll with dot indicator only."
+    },
+    {
+      "timestamp": "2026-06-12T10:05:00Z",
+      "stage": "visual_design",
+      "summary": "Palette anchored to roast-spectrum colours; Dried Cherry highlight flagged as underused in taste review."
+    },
+    {
+      "timestamp": "2026-06-12T10:30:00Z",
+      "stage": "motion_design",
+      "summary": "Per-section motion spec written; performance risk flagged on Ethiopia origins pin with 150vh pin + particle canvas co-running."
+    },
+    {
+      "timestamp": "2026-06-12T10:45:00Z",
+      "stage": "asset_manifest",
+      "summary": "7 images, 1 video, 2 audio assets specified; gap noted in subscription section asset coverage."
+    }
+  ]
+}

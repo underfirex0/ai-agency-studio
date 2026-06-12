@@ -1,0 +1,345 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ai-agency-studio/brief/schema.json",
+  "title": "Project Brief",
+  "description": "Shared state document passed between all pipeline stages. Each stage reads what it needs and writes its output section back.",
+  "type": "object",
+  "required": ["meta", "creative_direction", "ux_structure", "design_system", "motion_spec", "spatial_3d_spec", "asset_manifest", "taste_scores", "version_history"],
+  "additionalProperties": false,
+  "properties": {
+
+    "meta": {
+      "type": "object",
+      "description": "Project identity and audience framing — populated in stage 0 (intake).",
+      "required": ["project_name", "industry", "target_audience", "tone_keywords"],
+      "additionalProperties": false,
+      "properties": {
+        "project_name": {
+          "type": "string",
+          "description": "Human-readable project name used as the document title throughout the pipeline."
+        },
+        "industry": {
+          "type": "string",
+          "description": "Primary industry or vertical (e.g. 'specialty coffee', 'fintech', 'fashion retail')."
+        },
+        "target_audience": {
+          "type": "string",
+          "description": "Concise persona description: demographics, psychographics, key behaviours."
+        },
+        "tone_keywords": {
+          "type": "array",
+          "description": "3–7 adjectives that anchor the brand voice and filter all creative decisions.",
+          "items": { "type": "string" },
+          "minItems": 3,
+          "maxItems": 7
+        }
+      }
+    },
+
+    "creative_direction": {
+      "type": "object",
+      "description": "The creative backbone — concept, story arc, emotional intent, and brand character. Written by the Creative Director stage.",
+      "required": ["concept", "narrative", "emotional_tone", "signature_moment", "brand_personality"],
+      "additionalProperties": false,
+      "properties": {
+        "concept": {
+          "type": "string",
+          "description": "Single-sentence creative idea that unifies the entire experience. The elevator pitch for the design."
+        },
+        "narrative": {
+          "type": "string",
+          "description": "2–4 sentence arc describing the story the site tells from entry to conversion."
+        },
+        "emotional_tone": {
+          "type": "string",
+          "description": "The dominant feeling the visitor should carry away — distinct from the tone_keywords list."
+        },
+        "signature_moment": {
+          "type": "string",
+          "description": "One specific, concrete interaction or visual moment that makes the experience memorable and shareable."
+        },
+        "brand_personality": {
+          "type": "string",
+          "description": "The brand rendered as a person: their manner, vocabulary, and what they would never say or do."
+        }
+      }
+    },
+
+    "ux_structure": {
+      "type": "object",
+      "description": "Information architecture and conversion logic. Written by the UX Strategist stage.",
+      "required": ["sitemap", "conversion_flow", "navigation_pattern"],
+      "additionalProperties": false,
+      "properties": {
+        "sitemap": {
+          "type": "array",
+          "description": "Ordered list of pages or named sections within a single-page layout.",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "purpose"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "description": "Slug used to reference this section elsewhere (e.g. in motion_spec)." },
+              "label": { "type": "string", "description": "Display name shown in navigation." },
+              "purpose": { "type": "string", "description": "The one job this section must accomplish for the visitor." },
+              "children": {
+                "type": "array",
+                "description": "Sub-sections or nested pages, same schema.",
+                "items": { "$ref": "#/properties/ux_structure/properties/sitemap/items" }
+              }
+            }
+          }
+        },
+        "conversion_flow": {
+          "type": "string",
+          "description": "Plain-English description of the primary path from landing to primary CTA completion."
+        },
+        "navigation_pattern": {
+          "type": "string",
+          "description": "Navigation paradigm and behaviour (e.g. 'sticky minimal top-bar collapses to hamburger at 768px')."
+        }
+      }
+    },
+
+    "design_system": {
+      "type": "object",
+      "description": "Visual language tokens. Written by the Visual Design stage; consumed by the component generator.",
+      "required": ["typography", "color_palette", "spacing_scale", "components"],
+      "additionalProperties": false,
+      "properties": {
+        "typography": {
+          "type": "object",
+          "description": "Typeface choices and scale. Use real Google Fonts or Adobe Fonts names.",
+          "required": ["heading_font", "body_font", "scale"],
+          "additionalProperties": false,
+          "properties": {
+            "heading_font": {
+              "type": "object",
+              "required": ["name", "weight", "source"],
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string", "description": "Exact font family name." },
+                "weight": { "type": "string", "description": "Comma-separated weights to load (e.g. '300,700')." },
+                "source": { "type": "string", "enum": ["google", "adobe", "custom", "system"], "description": "Font CDN or origin." }
+              }
+            },
+            "body_font": {
+              "type": "object",
+              "required": ["name", "weight", "source"],
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "weight": { "type": "string" },
+                "source": { "type": "string", "enum": ["google", "adobe", "custom", "system"] }
+              }
+            },
+            "scale": {
+              "type": "object",
+              "description": "Named sizes in rem. Keys are semantic labels (e.g. 'display', 'h1' … 'caption').",
+              "additionalProperties": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?rem$" }
+            }
+          }
+        },
+        "color_palette": {
+          "type": "array",
+          "description": "Complete palette. Every entry must have a hex value and a declared usage role.",
+          "items": {
+            "type": "object",
+            "required": ["name", "hex", "role"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Human name for the swatch (e.g. 'Espresso', 'Cream')." },
+              "hex": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "description": "6-digit hex code." },
+              "role": { "type": "string", "description": "CSS variable semantic role (e.g. 'background', 'primary-text', 'accent', 'surface')." }
+            }
+          },
+          "minItems": 3
+        },
+        "spacing_scale": {
+          "type": "object",
+          "description": "Design-token spacing values in rem. Keys are t-shirt sizes or numeric steps.",
+          "additionalProperties": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?rem$" }
+        },
+        "components": {
+          "type": "array",
+          "description": "List of UI components needed for this project with their purpose and variant notes.",
+          "items": {
+            "type": "object",
+            "required": ["name", "description"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Component name in PascalCase." },
+              "description": { "type": "string", "description": "What it does and any notable variants or states." }
+            }
+          }
+        }
+      }
+    },
+
+    "motion_spec": {
+      "type": "object",
+      "description": "Animation and scroll behaviour contract. Written by the Motion Designer stage; consumed by the frontend generator.",
+      "required": ["global_principles", "per_section"],
+      "additionalProperties": false,
+      "properties": {
+        "global_principles": {
+          "type": "array",
+          "description": "Site-wide animation rules that every section must respect.",
+          "items": { "type": "string" },
+          "minItems": 2
+        },
+        "per_section": {
+          "type": "array",
+          "description": "Per-section motion instructions keyed to sitemap IDs.",
+          "items": {
+            "type": "object",
+            "required": ["section_id", "scroll_behavior", "transitions", "timing"],
+            "additionalProperties": false,
+            "properties": {
+              "section_id": { "type": "string", "description": "Must match a sitemap entry id." },
+              "scroll_behavior": { "type": "string", "description": "How scroll position drives visual change (e.g. 'parallax at 0.4× rate', 'pin for 200vh then release')." },
+              "transitions": { "type": "string", "description": "Enter/exit animation description including direction, opacity, scale, or clip-path." },
+              "timing": { "type": "string", "description": "Duration and easing (e.g. '600ms cubic-bezier(0.16,1,0.3,1)')." }
+            }
+          }
+        }
+      }
+    },
+
+    "spatial_3d_spec": {
+      "type": "object",
+      "description": "WebGL / Three.js scene definitions. Written by the 3D Spatial stage; omit scenes if used=false.",
+      "required": ["used"],
+      "additionalProperties": false,
+      "properties": {
+        "used": {
+          "type": "boolean",
+          "description": "Whether any 3D rendering is required. If false, the 3D stage is skipped."
+        },
+        "renderer": {
+          "type": "string",
+          "enum": ["three.js", "babylon.js", "model-viewer", "spline"],
+          "description": "Target rendering library."
+        },
+        "scenes": {
+          "type": "array",
+          "description": "One entry per distinct 3D scene or canvas element.",
+          "items": {
+            "type": "object",
+            "required": ["id", "description", "camera_movement", "performance_budget"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "description": { "type": "string", "description": "What the scene shows and its narrative purpose." },
+              "camera_movement": { "type": "string", "description": "Camera path, rig type, or scroll-driven movement description." },
+              "performance_budget": {
+                "type": "object",
+                "required": ["max_triangles", "target_fps"],
+                "additionalProperties": false,
+                "properties": {
+                  "max_triangles": { "type": "integer", "description": "Triangle count ceiling for the scene." },
+                  "target_fps": { "type": "integer", "description": "Minimum frame rate on mid-range mobile (e.g. 30)." }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "asset_manifest": {
+      "type": "object",
+      "description": "All media assets required by the project, with generative prompts for AI production.",
+      "required": ["images", "videos", "audio"],
+      "additionalProperties": false,
+      "properties": {
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "prompt", "style_reference", "usage"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "description": "Unique slug used in code (e.g. 'hero-pour-shot')." },
+              "prompt": { "type": "string", "description": "Full text-to-image prompt passed to the generation model." },
+              "style_reference": { "type": "string", "description": "Named photographer, film stock, or visual reference to anchor the style." },
+              "usage": { "type": "string", "description": "Where in the layout this image appears." },
+              "dimensions": { "type": "string", "description": "Target output dimensions (e.g. '1920×1080', '800×800')." }
+            }
+          }
+        },
+        "videos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "prompt", "usage"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "prompt": { "type": "string" },
+              "usage": { "type": "string" },
+              "duration_seconds": { "type": "number" },
+              "format": { "type": "string", "enum": ["mp4", "webm", "gif"] }
+            }
+          }
+        },
+        "audio": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "description", "usage"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "description": { "type": "string" },
+              "usage": { "type": "string" },
+              "duration_seconds": { "type": "number" },
+              "loop": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+
+    "taste_scores": {
+      "type": "object",
+      "description": "Quality scores from the assets-taste MCP server at each pipeline stage. Scale 0–100 vs reference corpus.",
+      "additionalProperties": false,
+      "properties": {
+        "creative_direction": { "$ref": "#/$defs/taste_entry" },
+        "visual_design": { "$ref": "#/$defs/taste_entry" },
+        "motion": { "$ref": "#/$defs/taste_entry" },
+        "assets": { "$ref": "#/$defs/taste_entry" },
+        "final": { "$ref": "#/$defs/taste_entry" }
+      }
+    },
+
+    "version_history": {
+      "type": "array",
+      "description": "Append-only log. Each pipeline stage appends one entry when it writes to the brief.",
+      "items": {
+        "type": "object",
+        "required": ["timestamp", "stage", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time", "description": "ISO 8601 UTC timestamp." },
+          "stage": { "type": "string", "description": "Name of the pipeline stage that made this write." },
+          "summary": { "type": "string", "description": "One sentence describing what changed and why." }
+        }
+      }
+    }
+
+  },
+
+  "$defs": {
+    "taste_entry": {
+      "type": "object",
+      "required": ["score", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "notes": { "type": "string", "description": "What was strong, what dragged the score, and the recommended fix." }
+      }
+    }
+  }
+}

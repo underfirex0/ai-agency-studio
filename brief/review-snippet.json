@@ -1,0 +1,109 @@
+{
+  "creative_direction": {
+    "concept": "Every bag of coffee is a compressed journey from a specific hillside to your cup — the site makes that altitude, terroir, and human chain viscerally felt.",
+    "narrative": "The visitor lands on darkness broken only by steam curling off a single pour — no text, just atmosphere. Scrolling down reveals the origin map: exact farm coordinates, elevation, harvest date. The middle act introduces the roasters by name, with their hand-annotated tasting notes. The site closes on the subscription CTA framed not as a product but as 'a standing order from the mountain.'",
+    "emotional_tone": "The quiet pride of someone who has found exactly the thing they were looking for.",
+    "signature_moment": "On the origin section, hovering a farm pin on the map triggers a 3-second ambient field recording from that specific farm (birds, wind, distant machinery) while the elevation number counts up in large type — making the geography audible.",
+    "brand_personality": "A seasoned Q-grader who speaks in exact descriptors ('dried apricot, brown butter, 72% cacao') rather than superlatives. Would never say 'artisanal' or 'passionate'. Comfortable with silence. Wears an apron with burn marks."
+  },
+  "design_system": {
+    "typography": {
+      "heading_font": {
+        "name": "Canela",
+        "weight": "300,400",
+        "source": "custom"
+      },
+      "body_font": {
+        "name": "Söhne",
+        "weight": "400,500",
+        "source": "custom"
+      },
+      "scale": {
+        "display": "7.5rem",
+        "h1": "4.5rem",
+        "h2": "2.75rem",
+        "h3": "1.75rem",
+        "lead": "1.25rem",
+        "body": "1rem",
+        "small": "0.875rem",
+        "caption": "0.75rem"
+      }
+    },
+    "color_palette": [
+      {
+        "name": "Wet Earth",
+        "hex": "#1C1512",
+        "role": "background"
+      },
+      {
+        "name": "Raw Parchment",
+        "hex": "#F2EDE4",
+        "role": "primary-text"
+      },
+      {
+        "name": "Blonde Roast",
+        "hex": "#C8A96E",
+        "role": "accent"
+      },
+      {
+        "name": "Dried Cherry",
+        "hex": "#8B2E2E",
+        "role": "highlight"
+      },
+      {
+        "name": "Steam",
+        "hex": "#E8E3DA",
+        "role": "surface"
+      },
+      {
+        "name": "Graphite",
+        "hex": "#3A3530",
+        "role": "secondary-surface"
+      }
+    ],
+    "spacing_scale": {
+      "xs": "0.25rem",
+      "sm": "0.5rem",
+      "md": "1rem",
+      "lg": "1.5rem",
+      "xl": "2.5rem",
+      "2xl": "4rem",
+      "3xl": "7rem",
+      "4xl": "12rem"
+    },
+    "components": [
+      {
+        "name": "FarmPin",
+        "description": "SVG map marker that pulses on hover, triggers audio playback and a slide-in FarmPanel. Active state shows elevation label in Canela display size."
+      },
+      {
+        "name": "FarmPanel",
+        "description": "Slide-in right-side drawer showing farmer portrait (greyscale), farm name, country, altitude in masl, processing method badge, and harvest month range."
+      },
+      {
+        "name": "RoasterCard",
+        "description": "Portrait photo in a ragged-edge mask, name in Canela h3, handwriting-style SVG of a tasting note overlaid at 40° rotation."
+      },
+      {
+        "name": "CoffeeCard",
+        "description": "Product card with origin flag, process badge (washed/natural/honey), flavour wheel fragment, price, and two CTAs: 'Buy once' and 'Add to standing order'."
+      },
+      {
+        "name": "ElevationCounter",
+        "description": "Large Canela display-size number that counts up from 0 to the farm's actual masl value over 2.4s when the farm pin is activated."
+      },
+      {
+        "name": "AmbientAudioPlayer",
+        "description": "Invisible audio element, auto-plays on farm pin hover, fades out after 3s or on mouseout. No visible controls — sound is the surprise."
+      },
+      {
+        "name": "SectionDotNav",
+        "description": "Vertical stack of 6 dots on the right edge, active dot fills with Blonde Roast accent colour. Clicks scroll to the corresponding section."
+      },
+      {
+        "name": "SubscriptionToggle",
+        "description": "Segmented control: 'Single bag' / 'Standing order'. Selecting standing order exposes frequency selector (2-weekly / 4-weekly) and shows a small price-per-bag saving."
+      }
+    ]
+  }
+}
