@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tectonic Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Cormorant Garamond (heading font per brief). Suisse Int'l is Adobe-only; Inter substitutes for test. -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      /* Colors */
+      --color-formed-ash:       #1A1916;
+      --color-drawn-light:      #F5F3EF;
+      --color-site-concrete:    #D6D2CB;
+      --color-uncut-limestone:  #8C8880;
+      --color-cold-seam:        #2E3A35;
+      --color-oxidised-copper:  #5C7A6E;
+      --color-fired-terracotta: #A0522D;
+
+      /* Typography */
+      --font-heading: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif; /* substitute for Suisse Int'l */
+
+      /* Scale */
+      --scale-display: 5.5rem;
+      --scale-h1:      3.5rem;
+      --scale-h2:      2.25rem;
+      --scale-h3:      1.5rem;
+      --scale-h4:      1.125rem;
+      --scale-body-lg: 1.0625rem;
+      --scale-body:    0.9375rem;
+      --scale-body-sm: 0.875rem;
+      --scale-label:   0.75rem;
+      --scale-caption: 0.6875rem;
+
+      /* Spacing */
+      --space-xs:  0.25rem;
+      --space-sm:  0.5rem;
+      --space-md:  1rem;
+      --space-lg:  1.5rem;
+      --space-xl:  2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 7rem;
+      --space-4xl: 11rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+    body {
+      background-color: var(--color-drawn-light);
+      color: var(--color-formed-ash);
+      font-family: var(--font-body);
+      font-weight: 300;
+    }
+
+    /* ── SilentNavBar ── */
+    /* Brief: fixed 24px-height top bar, wordmark flush-left in 11px uppercase, no nav links */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 24px;
+      background-color: var(--color-cold-seam);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-xl);
+      z-index: 100;
+    }
+    .nav__wordmark {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-drawn-light);
+    }
+
+    /* ── ThresholdFrame ── */
+    /* Brief: full-viewport entry, single building photograph, no copy, pure sensation */
+    .threshold {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: var(--color-formed-ash);
+    }
+
+    /* Architectural image rendered as a layered CSS composition — placeholder for real photo */
+    .threshold__image {
+      position: absolute;
+      inset: 0;
+      /* Simulate the tonal range of a raw concrete interior with raking light */
+      background:
+        linear-gradient(
+          165deg,
+          #0d0c0a 0%,
+          #1A1916 25%,
+          #2a2822 45%,
+          #3d3a35 62%,
+          #4e4a43 72%,
+          #D6D2CB 78%,
+          #F5F3EF 88%,
+          #e8e4de 100%
+        );
+    }
+
+    /* Architectural plane — suggests a wall or column edge */
+    .threshold__plane {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 58%;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(245,243,239,0.08) 20%,
+        rgba(245,243,239,0.22) 50%,
+        rgba(245,243,239,0.08) 80%,
+        transparent 100%
+      );
+    }
+
+    /* Hairline rule — appears 1.8s after load per motion spec */
+    .threshold__hairline {
+      position: absolute;
+      bottom: 20vh;
+      left: var(--space-xl);
+      right: var(--space-xl);
+      height: 1px;
+      background-color: rgba(245,243,239,0.18);
+      animation: hairline-enter 600ms cubic-bezier(0.0, 0.0, 0.2, 1.0) 1800ms both;
+    }
+    @keyframes hairline-enter {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* Wordmark overlay — appears 2.4s after load */
+    .threshold__wordmark {
+      position: absolute;
+      bottom: calc(20vh + var(--space-lg));
+      left: var(--space-xl);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(245,243,239,0.72);
+      animation: wordmark-enter 600ms cubic-bezier(0.0, 0.0, 0.2, 1.0) 2400ms both;
+    }
+    @keyframes wordmark-enter {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* Section dot nav — right edge, 6 dots, active fills with Oxidised Copper */
+    .dot-nav {
+      position: fixed;
+      right: var(--space-xl);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      z-index: 50;
+    }
+    .dot-nav__dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: rgba(245,243,239,0.3);
+      transition: background-color 300ms ease;
+      cursor: pointer;
+    }
+    .dot-nav__dot--active {
+      background-color: var(--color-oxidised-copper);
+    }
+
+    /* ── Process section ── */
+    .process {
+      padding: var(--space-3xl) var(--space-xl);
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+    .process__label {
+      font-family: var(--font-body);
+      font-size: var(--scale-label);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-uncut-limestone);
+      margin-bottom: var(--space-2xl);
+    }
+    .process__heading {
+      font-family: var(--font-heading);
+      font-size: var(--scale-h1);
+      font-weight: 300;
+      line-height: 1.12;
+      color: var(--color-formed-ash);
+      max-width: 28ch;
+      margin-bottom: var(--space-xl);
+    }
+    .process__heading em {
+      font-style: italic;
+      font-weight: 300;
+    }
+    .process__body {
+      font-family: var(--font-body);
+      font-size: var(--scale-body-lg);
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--color-formed-ash);
+      max-width: 52ch;
+      margin-bottom: var(--space-3xl);
+    }
+
+    /* DecisionTimeline entry — showing a material decision */
+    .decision-timeline {
+      border-top: 1px solid var(--color-site-concrete);
+      padding-top: var(--space-xl);
+    }
+    .decision-timeline__item {
+      display: grid;
+      grid-template-columns: var(--space-3xl) 1fr;
+      gap: var(--space-xl);
+      padding: var(--space-xl) 0;
+      border-bottom: 1px solid var(--color-site-concrete);
+    }
+    .decision-timeline__step {
+      font-family: var(--font-heading);
+      font-size: var(--scale-display);
+      font-weight: 300;
+      color: var(--color-site-concrete);
+      line-height: 1;
+      padding-top: var(--space-xs);
+    }
+    .decision-timeline__content {}
+    .decision-timeline__date {
+      font-family: var(--font-body);
+      font-size: var(--scale-caption);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-uncut-limestone);
+      margin-bottom: var(--space-md);
+    }
+    .decision-timeline__title {
+      font-family: var(--font-heading);
+      font-size: var(--scale-h3);
+      font-weight: 400;
+      color: var(--color-formed-ash);
+      margin-bottom: var(--space-md);
+    }
+    .decision-timeline__note {
+      font-family: var(--font-body);
+      font-size: var(--scale-body);
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--color-formed-ash);
+      max-width: 52ch;
+    }
+
+    /* Fired Terracotta stamp — used as a 'rejected' signal, sparingly */
+    .tag {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: var(--scale-caption);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .tag--rejected {
+      color: var(--color-fired-terracotta);
+      border: 1px solid var(--color-fired-terracotta);
+    }
+    .tag--accepted {
+      color: var(--color-oxidised-copper);
+      border: 1px solid var(--color-oxidised-copper);
+    }
+
+    /* ── BriefFragmentQuote ── */
+    .brief-quote {
+      padding: var(--space-3xl) var(--space-xl);
+      background-color: var(--color-site-concrete);
+    }
+    .brief-quote__inner {
+      max-width: 72rem;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: var(--space-xl) 1fr;
+      gap: var(--space-2xl);
+      align-items: start;
+    }
+    /* Cold Seam vertical rule — drawn via scaleY per motion spec */
+    .brief-quote__rule {
+      width: 1px;
+      height: 2rem;
+      background-color: var(--color-cold-seam);
+      margin-top: 0.35rem;
+      transform-origin: top;
+      animation: rule-draw 400ms cubic-bezier(0.16, 1.0, 0.3, 1.0) 320ms both;
+    }
+    @keyframes rule-draw {
+      from { transform: scaleY(0); }
+      to   { transform: scaleY(1); }
+    }
+    .brief-quote__text {
+      font-family: var(--font-heading);
+      font-size: var(--scale-h3);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--color-formed-ash);
+      margin-bottom: var(--space-md);
+    }
+    .brief-quote__source {
+      font-family: var(--font-body);
+      font-size: var(--scale-caption);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-uncut-limestone);
+    }
+
+    /* ── ConversationOpener ── */
+    .conversation {
+      padding: var(--space-4xl) var(--space-xl);
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+    .conversation__question {
+      font-family: var(--font-heading);
+      font-size: var(--scale-h2);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.3;
+      color: var(--color-formed-ash);
+      max-width: 36ch;
+      margin-bottom: var(--space-2xl);
+    }
+    .conversation__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-md);
+      font-family: var(--font-body);
+      font-size: var(--scale-label);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-formed-ash);
+      text-decoration: none;
+      border-bottom: 1px solid var(--color-formed-ash);
+      padding-bottom: 2px;
+    }
+    .conversation__cta::after {
+      content: '→';
+      font-style: normal;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SilentNavBar -->
+  <nav class="nav">
+    <span class="nav__wordmark">Tectonic Studio</span>
+  </nav>
+
+  <!-- Section dot navigation -->
+  <div class="dot-nav" aria-hidden="true">
+    <div class="dot-nav__dot dot-nav__dot--active"></div>
+    <div class="dot-nav__dot"></div>
+    <div class="dot-nav__dot"></div>
+    <div class="dot-nav__dot"></div>
+    <div class="dot-nav__dot"></div>
+    <div class="dot-nav__dot"></div>
+  </div>
+
+  <!-- ThresholdFrame — Entry section -->
+  <section class="threshold" aria-label="Entry">
+    <div class="threshold__image"></div>
+    <div class="threshold__plane"></div>
+    <div class="threshold__hairline"></div>
+    <span class="threshold__wordmark" aria-hidden="true">Tectonic Studio</span>
+  </section>
+
+  <!-- Process section with DecisionTimeline -->
+  <section class="process">
+    <p class="process__label">How We Work</p>
+    <h2 class="process__heading">
+      We ask more questions than<br>
+      <em>most architects draw lines.</em>
+    </h2>
+    <p class="process__body">
+      Every commission begins with a refusal to design. Before a plan is drawn, we spend
+      time understanding what went wrong the last time — and why the original brief
+      contained the answer, if only someone had listened carefully enough to find it.
+    </p>
+
+    <!-- DecisionTimeline -->
+    <div class="decision-timeline">
+      <div class="decision-timeline__item">
+        <span class="decision-timeline__step">01</span>
+        <div class="decision-timeline__content">
+          <p class="decision-timeline__date">Material decision · March 2024</p>
+          <h3 class="decision-timeline__title">
+            The threshold step was widened by 40mm.
+          </h3>
+          <p class="decision-timeline__note">
+            The original specification called for a flush threshold. Site survey revealed
+            a 3mm seasonal movement in the adjacent masonry. We widened the step to
+            allow for this without telegraphing the fix — the threshold now reads as a
+            deliberate proportional choice, not a correction.
+          </p>
+          <span class="tag tag--accepted">Resolved</span>
+        </div>
+      </div>
+
+      <div class="decision-timeline__item">
+        <span class="decision-timeline__step">02</span>
+        <div class="decision-timeline__content">
+          <p class="decision-timeline__date">Material selection · January 2024</p>
+          <h3 class="decision-timeline__title">
+            The first limestone sample was declined after three site visits.
+          </h3>
+          <p class="decision-timeline__note">
+            The specified Jura Beige showed acceptable laboratory results but read as
+            warm under the project's north-facing glazing. We sourced a grey limestone
+            from the same quarry with a 14% higher silica content — cooler, closer
+            to the light the building actually receives.
+          </p>
+          <span class="tag tag--rejected">Declined</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BriefFragmentQuote -->
+  <section class="brief-quote">
+    <div class="brief-quote__inner">
+      <div class="brief-quote__rule" aria-hidden="true"></div>
+      <div>
+        <p class="brief-quote__text">
+          "I don't want it to feel like a house. I want it to feel like the best
+          version of a decision I made a long time ago."
+        </p>
+        <p class="brief-quote__source">From the original brief, 2023</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ConversationOpener -->
+  <section class="conversation">
+    <p class="conversation__question">
+      What are you trying to resolve that no one has<br>
+      been precise enough to name yet?
+    </p>
+    <a href="#" class="conversation__cta">Begin a conversation</a>
+  </section>
+
+</body>
+</html>
