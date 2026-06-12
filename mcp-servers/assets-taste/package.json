@@ -1,0 +1,21 @@
+{
+  "name": "assets-taste",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test:imagen": "node test/test-imagen.js",
+    "test:critique": "node test/test-critique.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google-cloud/storage": "^7.21.0",
+    "@google-cloud/text-to-speech": "^6.4.1",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "google-auth-library": "^10.7.0"
+  }
+}
